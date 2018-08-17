@@ -1,8 +1,9 @@
 FROM ubuntu:latest
 RUN apt-get update -y
-RUN apt-get install -y python3-dev  build-essential python-pip gunicorn
-RUN pip install --upgrade setuptools
-COPY src /app
+RUN apt-get install -y python python-pip libmysqlclient-dev
+COPY app/requirements.txt .
+RUN pip install -r requirements.txt
+COPY app /app
 WORKDIR /app
-RUN pip install -r ./app/requirements.txt
-CMD ["gunicorn", "app:app", "-b", "0.0.0.0:8000"]
+EXPOSE 5000
+CMD ["gunicorn", "-b" , "0.0.0.0:5000", "hello:app"]
