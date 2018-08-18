@@ -59,8 +59,8 @@ pipeline {
 					
 		   fi
 		   
-		   docker stop $(docker ps --filter="name=test_image" -q )
-		   docker rm $(docker ps --filter="name=test_image" -q )
+		   docker stop \$(docker ps --filter="name=test_image" -q )
+		   docker rm \$(docker ps --filter="name=test_image" -q )
 		   """
 		 
 		 
