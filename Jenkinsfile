@@ -23,7 +23,7 @@ agent any
 	  
 	  script {
 		withCredentials([usernamePassword(credentialsId: 'dockkerhub', passwordVariable: 'DOCKERPWD', usernameVariable: 'DOCKERUSER')]) {
-		echo "Build tag $BUILD_TAG"
+		echo "Build tag ${env.BUILD_TAG}"
 		if ("${BUILD_TAG}" != ""){
 		stage('Build Docker image')
 		{
@@ -32,7 +32,7 @@ agent any
 			echo "Docker login successful"
 		
 			echo "Docker build image"
-			docker build -t $DOCKERUSER/demoapp:$BUILD_TAG 
+			docker build -t $DOCKERUSER/demoapp:${env.BUILD_TAG}
 			
 			
 			"""
@@ -41,7 +41,7 @@ agent any
 		 stage('Push to docker hub'){
 		 sh """
 		 echo "Push docker image"
-		 docker push $DOCKERUSER/demoapp:$BUILD_TAG
+		 docker push $DOCKERUSER/demoapp:${env.BUILD_TAG}
 		 echo "Push completed successfully"
 		 """
 		 }
@@ -51,8 +51,8 @@ agent any
 		   sh """
 		   
 		   echo "Pull the image"
-		   docker pull $DOCKERUSER/demoapp:$BUILD_TAG
-		   docker run -itd --name test_image -p 6000:5000 -l app=testimage $DOCKERUSER/demoapp:$BUILD_TAG 
+		   docker pull $DOCKERUSER/demoapp:${env.BUILD_TAG}
+		   docker run -itd --name test_image -p 6000:5000 -l app=testimage $DOCKERUSER/demoapp:${env.BUILD_TAG}
 		   echo "docker container successfully  started"
 		   if [ `curl -s -o /dev/null -w "%{http_code}\n" http://0.0.0.0:5000/` -eq 200 ]
 		   then
@@ -73,10 +73,10 @@ agent any
 		 
 		 sh """
 		 echo "Deploy Image on server"
-		 docker run -itd --name app_latest_version -p 5000:5000 -l app=demoapp -l version=$BUILD_TAG $DOCKERUSER/demoapp:$BUILD_TAG 
+		 docker run -itd --name app_latest_version -p 5000:5000 -l app=demoapp -l version=$BUILD_TAG $DOCKERUSER/demoapp:${env.BUILD_TAG}
 		 
-		 docker stop \$(docker ps --filter="app=demoapp" -q | grep -v $BUILD_TAG )
-		 docker rm \$(docker ps --filter="app=demoapp" -q | grep -v $BUILD_TAG )
+		 docker stop \$(docker ps --filter="app=demoapp" -q | grep -v ${env.BUILD_TAG} )
+		 docker rm \$(docker ps --filter="app=demoapp" -q | grep -v ${env.BUILD_TAG} )
 		 
 		 
 		 """
