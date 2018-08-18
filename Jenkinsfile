@@ -72,8 +72,8 @@ pipeline {
 		 echo "Deploy Image on server"
 		 docker run -itd --name app_latest_version -p 5000:5000 -l app=demoapp -l version=$BUILD_TAG $DOCKERUSER/demoapp:$BUILD_TAG 
 		 
-		 docker stop $(docker ps --filter="app=demoapp" -q | grep -v $BUILD_TAG )
-		 docker rm $(docker ps --filter="app=demoapp" -q | grep -v $BUILD_TAG )
+		 docker stop \$(docker ps --filter="app=demoapp" -q | grep -v $BUILD_TAG )
+		 docker rm \$(docker ps --filter="app=demoapp" -q | grep -v $BUILD_TAG )
 		 
 		 
 		 """
