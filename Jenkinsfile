@@ -40,8 +40,20 @@ agent any
 		}
 	
 		 stage('Test the image'){
-
+		   def testImageExist
                    sh """
+		   testImageExist=`docker ps --filter "name=test_image" -q | wc -l`
+		   if [ \$testImageExist -ge 1 ]
+		   then
+			docker stop \$(docker ps --filter "name=test_image" -q )
+			docker rm \$(docker ps -a --filter "name=test_image" -q )
+		   fi
+
+		   testImageExist=`docker ps -a --filter "name=test_image" -q | wc -l`
+		   if [ \$testImageExist -ge 1 ]
+                   then
+                        docker rm \$(docker ps -a --filter "name=test_image" -q )
+                   fi
 
                    echo "Run container with latest image"
                    docker run -itd --name test_image -p 6000:5000 -l app=testimage $DOCKERUSER/demoapp:${BUILD_TAG}
