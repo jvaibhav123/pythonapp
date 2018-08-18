@@ -1,3 +1,4 @@
+#!/usr/bin/groovy
 pipeline {
   
 def BUILD_TAG="v9" 
