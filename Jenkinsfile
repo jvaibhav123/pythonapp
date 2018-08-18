@@ -24,7 +24,7 @@ agent any
 	  script {
 		withCredentials([usernamePassword(credentialsId: 'dockkerhub', passwordVariable: 'DOCKERPWD', usernameVariable: 'DOCKERUSER')]) {
 		echo "Build tag ${env.BUILD_TAG}"
-		if ("${BUILD_TAG}" != ""){
+		if ("${env.BUILD_TAG}" != ""){
 		stage('Build Docker image')
 		{
 			sh """
