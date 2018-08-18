@@ -1,9 +1,12 @@
 #!/usr/bin/env groovy
 pipeline {
   
-def BUILD_TAG="v9" 
 
-agent any  
+agent any 
+
+environment {
+        BUILD_TAG = 'v9'
+    } 
   
   stages {
  
@@ -23,7 +26,7 @@ agent any
 	  
 	  script {
 		withCredentials([usernamePassword(credentialsId: 'dockkerhub', passwordVariable: 'DOCKERPWD', usernameVariable: 'DOCKERUSER')]) {
-		echo "Build tag ${env.BUILD_TAG}"
+		echo "Build tag ${BUILD_TAG}"
 		if ("${BUILD_TAG}" != ""){
 		stage('Build Docker image')
 		{
