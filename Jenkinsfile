@@ -11,9 +11,7 @@ agent any
 		script {
 		def BUILD_TAG=sh(script:"git tag -l --points-at HEAD", returnStdout:true).trim()
 		git credentialsId: 'e0c038d8-5106-4d22-87e5-16b018816ef7', url: 'https://github.com/jvaibhav123/pythonapp.git'
-		sh """
 		env.BUILD_TAG=$BUILD_TAG
-		"""
 		}
 	   }	
 	}
