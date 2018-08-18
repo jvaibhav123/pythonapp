@@ -1,4 +1,4 @@
-sk import Flask
+from flask import Flask
 import random
 #import pymysql
 from flask_sqlalchemy import SQLAlchemy
