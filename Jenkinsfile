@@ -11,7 +11,9 @@ agent any
 		script {
 		def BUILD_TAG=sh(script:"git tag -l --points-at HEAD", returnStdout:true).trim()
 		git credentialsId: 'e0c038d8-5106-4d22-87e5-16b018816ef7', url: 'https://github.com/jvaibhav123/pythonapp.git'
+		sh """
 		env.BUILD_TAG=$BUILD_TAG
+		"""
 		}
 	   }	
 	}
@@ -73,7 +75,7 @@ agent any
 		 
 		 sh """
 		 echo "Deploy Image on server"
-		 docker run -itd --name app_latest_version -p 5000:5000 -l app=demoapp -l version=$BUILD_TAG $DOCKERUSER/demoapp:${env.BUILD_TAG}
+		 docker run -itd --name app_latest_version -p 5000:5000 -l app=demoapp -l version=${env.BUILD_TAG} $DOCKERUSER/demoapp:${env.BUILD_TAG}
 		 
 		 docker stop \$(docker ps --filter="app=demoapp" -q | grep -v ${env.BUILD_TAG} )
 		 docker rm \$(docker ps --filter="app=demoapp" -q | grep -v ${env.BUILD_TAG} )
