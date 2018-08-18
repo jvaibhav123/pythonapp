@@ -31,8 +31,6 @@ environment {
 		stage('Build Docker image')
 		{
 			sh """
-			docker login --username $DOCKERUSER --password $DOCKERPWD
-			echo "Docker login successful"
 		
 			echo "Docker build image"
 			docker build -t $DOCKERUSER/demoapp:${BUILD_TAG}
@@ -67,6 +65,8 @@ environment {
 
 		 stage('Push to docker hub'){
 		 sh """
+		docker login --username $DOCKERUSER --password $DOCKERPWD
+		echo "Docker login successful"
 		 echo "Push docker image"
 		 docker push $DOCKERUSER/demoapp:${BUILD_TAG}
 		 echo "Push completed successfully"
