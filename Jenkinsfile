@@ -33,7 +33,7 @@ environment {
 			sh """
 		
 			echo "Docker build image"
-			docker build -t $DOCKERUSER/demoapp:${BUILD_TAG}
+			docker build -t $DOCKERUSER/demoapp:${BUILD_TAG} .
 			
 			
 			"""
