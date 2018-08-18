@@ -4,10 +4,7 @@ pipeline {
 
 agent any 
 
-environment {
-        BUILD_TAG = 'v9'
-    } 
-  
+
   stages {
  
 	
@@ -15,6 +12,8 @@ environment {
 		steps{
 		script {
 		git credentialsId: 'e0c038d8-5106-4d22-87e5-16b018816ef7', url: 'https://github.com/jvaibhav123/pythonapp.git'
+		def BUILD_TAG=sh(script:"git tag -l --points-at HEAD", returnStdout:true).trim()
+		env.BUILD_TAG=BUILD_TAG
 		}
 	   }	
 	}
@@ -47,6 +46,7 @@ environment {
                    echo "Run container with latest image"
                    docker run -itd --name test_image -p 6000:5000 -l app=testimage $DOCKERUSER/demoapp:${BUILD_TAG}
                    echo "docker container successfully  started"
+                   sleep 5
                    if [ `curl -s -o /dev/null -w "%{http_code}\n" http://0.0.0.0:6000/` -eq 200 ]
                    then
                                         echo "Docker image successfully running"
@@ -56,7 +56,7 @@ environment {
                    fi
 
                    docker stop \$(docker ps --filter "name=test_image" -q )
-                   docker rm \$(docker ps --filter "name=test_image" -q )
+                   docker rm \$(docker ps -a --filter "name=test_image" -q )
                    """
 
 
@@ -77,11 +77,13 @@ environment {
 		 stage('Deploy the image'){
 		 
 		 sh """
+		 echo "Stop existing "
+		 docker stop \$(docker ps --filter "label=app=demoapp" -q | grep -v ${BUILD_TAG} )
+		 docker rm \$(docker ps -a --filter "label=app=demoapp" -q | grep -v ${BUILD_TAG} )
+		 sleep 2
 		 echo "Deploy Image on server"
-		 docker run -itd --name app_latest_version -p 5000:5000 -l app=demoapp -l version=${BUILD_TAG} $DOCKERUSER/demoapp:${BUILD_TAG}
+		 docker run -itd --name pythonapp -p 5000:5000 -l app=demoapp -l version=${BUILD_TAG} $DOCKERUSER/demoapp:${BUILD_TAG}
 		 
-		 docker stop \$(docker ps --filter="app=demoapp" -q | grep -v ${BUILD_TAG} )
-		 docker rm \$(docker ps --filter="app=demoapp" -q | grep -v ${BUILD_TAG} )
 		 
 		 
 		 """
@@ -102,5 +104,7 @@ environment {
 
 
 }
+
+
 
 
