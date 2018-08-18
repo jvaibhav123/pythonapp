@@ -1,6 +1,6 @@
 pipeline {
   
-  notifyStatus "Started " 
+  
   
   agent any
   
@@ -8,9 +8,12 @@ pipeline {
  
 	
     stage('checkout') {
+		steps {
 		git credentialsId: 'e0c038d8-5106-4d22-87e5-16b018816ef7', url: 'https://github.com/jvaibhav123/pythonapp.git'
 	    def BUILD_TAG=sh(script:"git tag -l --points-at HEAD", returnStdout:true).trim()
 		env.BUILD_TAG=BUILD.TAG
+		notifyStatus "Started" 
+		}
 	}
 	
 	
@@ -59,8 +62,8 @@ pipeline {
 					
 		   fi
 		   
-		   docker stop \$(docker ps --filter="name=test_image" -q )
-		   docker rm \$(docker ps --filter="name=test_image" -q )
+		   docker stop $(docker ps --filter="name=test_image" -q )
+		   docker rm $(docker ps --filter="name=test_image" -q )
 		   """
 		 
 		 
