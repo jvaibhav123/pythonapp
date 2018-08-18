@@ -47,7 +47,7 @@ environment {
                    echo "Run container with latest image"
                    docker run -itd --name test_image -p 6000:5000 -l app=testimage $DOCKERUSER/demoapp:${BUILD_TAG}
                    echo "docker container successfully  started"
-                   if [ `curl -s -o /dev/null -w "%{http_code}\n" http://0.0.0.0:5000/` -eq 200 ]
+                   if [ `curl -s -o /dev/null -w "%{http_code}\n" http://0.0.0.0:6000/` -eq 200 ]
                    then
                                         echo "Docker image successfully running"
                    else
@@ -55,8 +55,8 @@ environment {
 
                    fi
 
-                   docker stop \$(docker ps --filter="name=test_image" -q )
-                   docker rm \$(docker ps --filter="name=test_image" -q )
+                   docker stop \$(docker ps --filter "name=test_image" -q )
+                   docker rm \$(docker ps --filter "name=test_image" -q )
                    """
 
 
