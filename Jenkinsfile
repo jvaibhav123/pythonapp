@@ -1,7 +1,8 @@
-#!/usr/bin/groovy
+#!/usr/bin/env groovy
 pipeline {
   
 def BUILD_TAG="v9" 
+
 agent any  
   
   stages {
