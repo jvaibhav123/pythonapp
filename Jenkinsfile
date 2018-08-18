@@ -8,8 +8,9 @@ agent any
 	
     stage('checkout') {
 		steps{
+		def BUILD_TAG="v.7"
 		git credentialsId: 'e0c038d8-5106-4d22-87e5-16b018816ef7', url: 'https://github.com/jvaibhav123/pythonapp.git'
-		env.BUILD_TAG="v.7"
+		env.BUILD_TAG=$BUILD_TAG
 		}
 	}
 	
